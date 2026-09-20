@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sedra Jlilaty — Frontend & Mobile Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0810;
+    --bg-elevated:#120D1A;
+    --surface:#191220;
+    --surface-2:#20182A;
+    --border:#2B2233;
+    --text:#F5F1F6;
+    --text-muted:#AA9FB2;
+    --text-dim:#71667B;
+    --pink:#FF2D78;
+    --pink-soft:#FF82B4;
+    --gold:#FFB020;
+    --gold-soft:#FFD37A;
+    --grad: linear-gradient(120deg,var(--pink),var(--gold));
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Work Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.font-display{font-family:'Fraunces',serif; font-optical-sizing:auto;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+
+  ::selection{background:var(--pink);color:#0B0810;}
+
+  .bg-glow{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(600px 400px at 15% 8%, rgba(255,45,120,.16), transparent 60%),
+      radial-gradient(700px 500px at 90% 20%, rgba(255,176,32,.10), transparent 60%),
+      radial-gradient(500px 400px at 50% 95%, rgba(255,45,120,.10), transparent 60%);
+  }
+  .grid-overlay{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.3;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(circle at 50% 20%, black, transparent 75%);
+  }
+
+  section{position:relative; z-index:1;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  .navbar{
+    position:fixed; top:22px; left:50%; transform:translateX(-50%);
+    z-index:50; display:flex; align-items:center; gap:4px;
+    background:rgba(18,13,26,.72); backdrop-filter:blur(16px);
+    border:1px solid var(--border); border-radius:999px;
+    padding:8px; box-shadow:0 12px 30px rgba(0,0,0,.35);
+  }
+  .navbar a{
+    font-size:13.5px; font-weight:600; color:var(--text-muted);
+    padding:9px 16px; border-radius:999px; transition:color .2s, background .2s;
+    white-space:nowrap; font-family:'Work Sans',sans-serif;
+  }
+  .navbar a:hover{color:var(--text); background:rgba(255,255,255,.05);}
+  .navbar a.active{color:#0B0810; background:var(--grad);}
+  @media (max-width:720px){
+    .navbar{ max-width:92vw; overflow-x:auto; gap:0; }
+    .navbar a{ padding:8px 12px; font-size:12.5px; }
+  }
+
+  .hero{padding:150px 0 90px;}
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--border); background:var(--surface);
+    padding:7px 14px; border-radius:999px; font-size:12.5px;
+    color:var(--text-muted); font-weight:600; margin-bottom:26px;
+  }
+  .badge .dot{width:7px;height:7px;border-radius:50%; background:#34D399; box-shadow:0 0 8px #34D399;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;} .hero{padding-top:120px;}}
+
+  .hero h1{font-size:clamp(2.5rem,5vw,3.7rem); line-height:1.08; font-weight:600; margin:0 0 20px;}
+  .hero h1 .role{
+    display:block; background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+    font-weight:700;
+  }
+  .hero p.lede{color:var(--text-muted); font-size:17px; line-height:1.7; max-width:52ch; margin:0 0 34px;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:46px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 24px; border-radius:12px; font-weight:700; font-size:14.5px;
+    border:1px solid transparent; transition:transform .18s ease, box-shadow .18s ease, background .18s;
+    font-family:'Work Sans',sans-serif;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--grad); color:#0B0810; box-shadow:0 10px 26px rgba(255,45,120,.25);}
+  .btn-primary:hover{box-shadow:0 14px 32px rgba(255,45,120,.38);}
+  .btn-ghost{background:var(--surface); color:var(--text); border-color:var(--border);}
+  .btn-ghost:hover{background:var(--surface-2);}
+
+  .stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .stat{
+    border:1px solid var(--border); background:var(--surface);
+    border-radius:14px; padding:16px 14px;
+  }
+  .stat .num{font-family:'Fraunces',serif; font-weight:600; font-size:20px; background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .stat .label{font-size:12px; color:var(--text-dim); margin-top:4px; line-height:1.4;}
+  @media (max-width:560px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+
+  .term{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px;
+    overflow:hidden; box-shadow:0 30px 70px rgba(0,0,0,.5);
+  }
+  .term-head{
+    display:flex; align-items:center; gap:8px; padding:13px 16px;
+    border-bottom:1px solid var(--border); background:var(--surface);
+  }
+  .term-head .tf{width:11px;height:11px;border-radius:50%;}
+  .term-title{margin-left:8px; font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
+  .term-body{padding:22px 20px; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.85; min-height:320px;}
+  .term-body .c-key{color:var(--gold-soft);}
+  .term-body .c-str{color:#7DE8B8;}
+  .term-body .c-fn{color:var(--pink-soft);}
+  .term-body .c-cm{color:var(--text-dim);}
+  .term-body .c-punc{color:var(--text-dim);}
+  #typecursor{display:inline-block; width:7px; height:15px; background:var(--pink); margin-left:2px; vertical-align:middle; animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .eyebrow-wrap{display:flex; align-items:baseline; gap:14px; margin-bottom:14px;}
+  .sec-num{font-family:'JetBrains Mono',monospace; color:var(--pink); font-size:14px;}
+  .sec-title{font-size:clamp(1.7rem,3.2vw,2.3rem); font-weight:600; margin:0 0 14px;}
+  .sec-sub{color:var(--text-muted); max-width:60ch; line-height:1.7; margin:0 0 48px; font-size:15.5px;}
+
+  section.pad{padding:110px 0;}
+  .divider{height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent);}
+
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;}
+  @media (max-width:860px){.about-grid{grid-template-columns:1fr;}}
+  .about-grid p{color:var(--text-muted); line-height:1.85; font-size:16px; margin:0 0 18px;}
+  .about-grid strong{color:var(--text); font-weight:700;}
+  .skill-block{margin-bottom:22px;}
+  .skill-block h4{font-size:12.5px; text-transform:none; color:var(--gold); font-weight:700; margin:0 0 10px; font-family:'JetBrains Mono',monospace;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    border:1px solid var(--border); background:var(--surface);
+    padding:6px 13px; border-radius:8px; font-size:13px; color:var(--text-muted); font-weight:600;
+  }
+
+  .project-feature{
+    display:grid; grid-template-columns:1fr 1fr; gap:0;
+    border:1px solid var(--border); border-radius:20px; overflow:hidden;
+    background:var(--surface); margin-bottom:28px;
+  }
+  @media (max-width:860px){.project-feature{grid-template-columns:1fr;}}
+  .project-media{
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,.025) 0 2px, transparent 2px 14px),
+      linear-gradient(160deg, var(--surface-2), var(--bg-elevated));
+    border-right:1px solid var(--border);
+    min-height:360px; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px;
+    position:relative; overflow:hidden;
+  }
+  .project-media.portrait{min-height:560px;}
+  .project-media.portrait .c-track{left:50%; right:auto; width:260px; transform:translateX(-50%); border-radius:20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.45);}
+  .project-media.carousel{padding:0;}
+  .c-track{position:absolute; inset:0;}
+  .c-slide{
+    position:absolute; inset:0; background-size:contain; background-repeat:no-repeat; background-position:center;
+    background-color:var(--bg-elevated);
+    opacity:0; transition:opacity .4s ease; display:flex; align-items:flex-end;
+  }
+  .c-slide.active{opacity:1;}
+  .c-slide .c-label{
+    width:100%; padding:14px 16px 12px; font-size:11.5px; font-weight:700; color:var(--text-dim);
+    font-family:'JetBrains Mono',monospace; background:linear-gradient(0deg, rgba(11,8,16,.85), transparent 90%);
+  }
+  .c-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:2;
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--border);
+    background:rgba(18,13,26,.72); backdrop-filter:blur(6px); color:var(--text);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px;
+  }
+  .c-arrow:hover{background:rgba(255,45,120,.25); border-color:var(--pink);}
+  .c-prev{left:12px;} .c-next{right:12px;}
+  .c-dots{position:absolute; bottom:12px; left:50%; transform:translateX(-50%); z-index:2; display:flex; gap:6px;}
+  .c-dot{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.28); cursor:pointer; transition:background .2s, width .2s;}
+  .c-dot.active{background:var(--pink); width:16px; border-radius:4px;}
+
+  @media (max-width:860px){.project-media{border-right:none; border-bottom:1px solid var(--border); min-height:240px;} .project-media.portrait{min-height:440px;} .project-media.portrait .c-track{width:220px;}}
+  .project-media .ph{color:var(--text-dim); font-size:12.5px; font-family:'JetBrains Mono',monospace;}
+  .project-body{padding:34px 34px;}
+  .project-tag{
+    display:inline-block; font-size:11.5px; font-weight:700; letter-spacing:.02em;
+    color:var(--pink-soft); font-family:'JetBrains Mono',monospace; margin-bottom:10px;
+  }
+  .tag-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .repo-link{
+    font-size:12px; font-weight:700; color:var(--gold-soft); font-family:'JetBrains Mono',monospace;
+    white-space:nowrap; border-bottom:1px solid transparent;
+  }
+  .repo-link:hover{border-bottom-color:var(--gold-soft);}
+  .project-body h3{font-size:22px; margin:0 0 12px; font-weight:600;}
+  .project-body ul{margin:0 0 18px; padding-left:18px; color:var(--text-muted); line-height:1.75; font-size:14.5px;}
+  .project-body ul li{margin-bottom:6px;}
+  .project-body .chip-row{margin-top:6px;}
+
+  .project-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media (max-width:900px){.project-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:620px){.project-grid{grid-template-columns:1fr;}}
+  .project-card{
+    border:1px solid var(--border); border-radius:16px; background:var(--surface); overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .project-card .thumb{
+    height:110px;
+    background:linear-gradient(160deg, var(--surface-2), var(--bg-elevated));
+    background-size:cover; background-position:center;
+    display:flex; align-items:flex-end; justify-content:flex-start;
+    color:var(--text-dim); font-size:11px; font-family:'JetBrains Mono',monospace;
+    border-bottom:1px solid var(--border); cursor:pointer; position:relative;
+  }
+  .project-card .thumb .t-label{
+    padding:8px 10px 7px; width:100%;
+    background:linear-gradient(0deg, rgba(11,8,16,.8), transparent 90%);
+  }
+  .project-card .pc-body{padding:20px; display:flex; flex-direction:column; flex:1;}
+  .project-card h4{margin:0 0 8px; font-size:16px; font-weight:600; font-family:'Fraunces',serif;}
+  .project-card p{margin:0 0 14px; color:var(--text-muted); font-size:13.5px; line-height:1.65;}
+  .project-card .pc-link{margin-top:auto; font-size:12.5px; font-weight:700; color:var(--gold-soft);}
+
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media (max-width:820px){.gallery-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.gallery-grid{grid-template-columns:1fr;}}
+  .gallery-item{
+    position:relative; aspect-ratio:4/3; border-radius:18px; overflow:hidden;
+    border:1px solid var(--border); background:var(--surface);
+    background-size:cover; background-position:center;
+    cursor:pointer; display:flex; align-items:flex-end;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .gallery-item:hover{transform:translateY(-4px); border-color:var(--pink);}
+  .gallery-item .gcap{
+    width:100%; padding:16px 16px 14px; font-size:12.5px; font-weight:700;
+    color:var(--text); background:linear-gradient(0deg, rgba(11,8,16,.88), transparent 85%);
+  }
+  .gallery-item .gcap span{display:block; font-weight:500; color:var(--text-dim); font-size:11px; margin-top:2px; font-family:'JetBrains Mono',monospace;}
+  .lightbox{
+    position:fixed; inset:0; z-index:300; background:rgba(11,8,16,.92);
+    display:none; align-items:center; justify-content:center; padding:30px;
+    backdrop-filter:blur(6px);
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw; max-height:88vh; border-radius:14px; border:1px solid var(--border); box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  .lightbox-close{
+    position:absolute; top:22px; right:26px; width:40px; height:40px; border-radius:50%;
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    font-size:20px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+
+  .contact-card{
+    border:1px solid var(--border); border-radius:22px; padding:56px;
+    background:radial-gradient(500px 300px at 20% 0%, rgba(255,45,120,.10), transparent 60%), var(--surface);
+    text-align:center;
+  }
+  @media (max-width:640px){.contact-card{padding:36px 22px;}}
+  .contact-card h2{font-size:clamp(1.8rem,4vw,2.6rem); margin:0 0 16px;}
+  .contact-card p{color:var(--text-muted); max-width:50ch; margin:0 auto 32px; line-height:1.7;}
+  .contact-links{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+
+  footer{padding:36px 0 120px; text-align:center; color:var(--text-dim); font-size:13px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    #typecursor{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="grid-overlay"></div>
+
+<nav class="navbar" id="navbar">
+  <a href="#home" class="active">Home</a>
+  <a href="#about">About</a>
+  <a href="#projects">Projects</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="badge"><span class="dot"></span> Currently accepting new opportunities</div>
+      <h1>I'm Sedra 🎀<span class="role">Frontend &amp; Mobile Developer.</span></h1>
+      <p class="lede">I build bilingual, production-style interfaces with React and Flutter — and I'm pushing further into the backend with real Node.js apps handling auth, payments, and full order flows, alongside GraphQL and TypeScript.</p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="Sedra_Jlilaty_CV.pdf" download class="btn btn-ghost">🎀 Download CV</a>
+        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="num">8+</div><div class="label">Shipped projects</div></div>
+        <div class="stat"><div class="num">9th/1300</div><div class="label">Class rank, Damascus Univ.</div></div>
+        <div class="stat"><div class="num">AR/EN</div><div class="label">Bilingual, RTL-ready UI</div></div>
+        <div class="stat"><div class="num">React·Flutter</div><div class="label">Core stack</div></div>
+      </div>
+    </div>
+
+    <div class="term">
+      <div class="term-head">
+        <span class="tf" style="background:#FF5F57"></span>
+        <span class="tf" style="background:#FEBC2E"></span>
+        <span class="tf" style="background:#28C840"></span>
+        <span class="term-title">sedra.dev — portfolio.js</span>
+      </div>
+      <div class="term-body" id="termBody"></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- ABOUT -->
+<section id="about" class="pad">
+  <div class="wrap">
+    <div class="eyebrow-wrap"><span class="sec-num">01</span></div>
+    <h2 class="sec-title">About me</h2>
+    <p class="sec-sub">A quick summary of who I am and how I work.</p>
+
+    <div class="about-grid">
+      <div>
+        <p>Frontend is where I like to work, because it's the layer people actually feel — every state change, every loading skeleton, every RTL flip has to be right or the whole product feels broken.</p>
+        <p>I'm a fourth-year <strong>Computer Engineering</strong> student at Damascus University, currently ranked <strong>9th out of roughly 1,300</strong> students in my cohort — but most of what I know about shipping real software came from building outside the classroom: React dashboards, Flutter apps talking to real Laravel and Node APIs, and interfaces that hold up in both Arabic and English.</p>
+        <p>I've already taken my first real steps into the backend too — building a Node.js shop end-to-end, with authentication, cart, checkout, and real payment integration — and I'm continuing that path toward full-stack, on top of leading frontend on Ataa's React/Flutter/Laravel system.</p>
+      </div>
+      <div>
+        <div class="skill-block">
+          <h4>frontend</h4>
+          <div class="chip-row">
+            <span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">HTML/CSS</span><span class="chip">Tailwind CSS</span><span class="chip">React Query</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <h4>mobile</h4>
+          <div class="chip-row">
+            <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Provider</span><span class="chip">BLoC/Cubit</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <h4>backend &amp; integration</h4>
+          <div class="chip-row">
+            <span class="chip">Node.js</span><span class="chip">GraphQL</span><span class="chip">MongoDB</span><span class="chip">Supabase</span><span class="chip">REST APIs</span><span class="chip">Dio</span><span class="chip">Axios</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <h4>languages &amp; tools</h4>
+          <div class="chip-row">
+            <span class="chip">C++</span><span class="chip">Java</span><span class="chip">Git / GitHub</span><span class="chip">Vercel</span><span class="chip">Cursor AI</span><span class="chip">Claude</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- PROJECTS -->
+<section id="projects" class="pad">
+  <div class="wrap">
+    <div class="eyebrow-wrap"><span class="sec-num">02</span></div>
+    <h2 class="sec-title">Selected projects</h2>
+    <p class="sec-sub">Full case studies with screenshots are on their way — here's what each one covers.</p>
+
+    <!-- FEATURED: ATAA -->
+    <div class="project-feature">
+      <div class="project-media carousel" data-carousel>
+        <div class="c-track">
+          <div class="c-slide active" style="background-image:url('gallery/ataa-1.png')"><div class="c-label">Ataa — screenshot 1</div></div>
+          <div class="c-slide" style="background-image:url('gallery/ataa-2.png')"><div class="c-label">Ataa — screenshot 2</div></div>
+          <div class="c-slide" style="background-image:url('gallery/ataa-3.png')"><div class="c-label">Ataa — screenshot 3</div></div>
+          <div class="c-slide" style="background-image:url('gallery/ataa-4.png')"><div class="c-label">Ataa — screenshot 4</div></div>
+          <div class="c-slide" style="background-image:url('gallery/ataa-5.png')"><div class="c-label">Ataa — screenshot 5</div></div>
+          <div class="c-slide" style="background-image:url('gallery/ataa-6.png')"><div class="c-label">Ataa — screenshot 6</div></div>
+        </div>
+        <div class="c-arrow c-prev">‹</div>
+        <div class="c-arrow c-next">›</div>
+        <div class="c-dots"><span class="c-dot active"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span></div>
+      </div>
+      <div class="project-body">
+        <div class="tag-row">
+          <span class="project-tag">GRADUATION PROJECT · 2025–2026</span>
+          <a class="repo-link" href="https://github.com/sedrajlilaty/Charity-Management-System" target="_blank">GitHub ↗</a>
+        </div>
+        <h3>Ataa — Charity Management Platform 🎀</h3>
+        <ul>
+          <li>Full-stack system: React/Vite dashboard, Flutter mobile app, Laravel REST API — built with a backend teammate.</li>
+          <li>Donation tracking, beneficiary management across four categories, and campaign progress, with role-based access control that protects both routes and individual actions per role.</li>
+          <li>Volunteer Kanban board with drag-and-drop, an interactive map of beneficiary locations, and monthly PDF report generation.</li>
+          <li>A Gemini-powered AI assistant for live dashboard Q&amp;A, plus a bilingual AR/EN interface with full RTL support.</li>
+        </ul>
+        <div class="chip-row">
+          <span class="chip">React</span><span class="chip">React Query</span><span class="chip">Flutter</span><span class="chip">Laravel</span><span class="chip">RBAC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED: KING BOOKING -->
+    <div class="project-feature">
+      <div class="project-media carousel portrait" data-carousel>
+        <div class="c-track">
+          <div class="c-slide active" style="background-image:url('gallery/king-1.jpg')"><div class="c-label">King Booking — screenshot 1</div></div>
+          <div class="c-slide" style="background-image:url('gallery/king-2.jpg')"><div class="c-label">King Booking — screenshot 2</div></div>
+          <div class="c-slide" style="background-image:url('gallery/king-3.jpg')"><div class="c-label">King Booking — screenshot 3</div></div>
+          <div class="c-slide" style="background-image:url('gallery/king-4.jpg')"><div class="c-label">King Booking — screenshot 4</div></div>
+          <div class="c-slide" style="background-image:url('gallery/king-5.jpg')"><div class="c-label">King Booking — screenshot 5</div></div>
+          <div class="c-slide" style="background-image:url('gallery/king-6.jpg')"><div class="c-label">King Booking — screenshot 6</div></div>
+        </div>
+        <div class="c-arrow c-prev">‹</div>
+        <div class="c-arrow c-next">›</div>
+        <div class="c-dots"><span class="c-dot active"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span></div>
+      </div>
+      <div class="project-body">
+        <div class="tag-row">
+          <span class="project-tag">MOBILE · 2025</span>
+          <a class="repo-link" href="https://github.com/sedrajlilaty/BookingProject" target="_blank">GitHub ↗</a>
+        </div>
+        <h3>King Booking — Property Rental App 🎀</h3>
+        <ul>
+          <li>Two-sided marketplace where users register as either an owner or a tenant, with role-based navigation over a shared listing component.</li>
+          <li>Laravel REST API via Dio, with a centralized network layer, token auth, and request interceptors.</li>
+          <li>Full booking lifecycle — create, approve, reject, cancel, rate — with live request tracking and multipart image uploads.</li>
+          <li>Provider for auth/bookings/notifications, BLoC/Cubit for listings/theme/language; bilingual AR/EN with RTL.</li>
+        </ul>
+        <div class="chip-row">
+          <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Provider</span><span class="chip">BLoC</span><span class="chip">Dio</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED: CABIN BOOKING -->
+    <div class="project-feature">
+      <div class="project-media carousel" data-carousel>
+        <div class="c-track">
+          <div class="c-slide active" style="background-image:url('gallery/cabin-1.png')"><div class="c-label">Cabin Booking — screenshot 1</div></div>
+          <div class="c-slide" style="background-image:url('gallery/cabin-2.png')"><div class="c-label">Cabin Booking — screenshot 2</div></div>
+          <div class="c-slide" style="background-image:url('gallery/cabin-3.png')"><div class="c-label">Cabin Booking — screenshot 3</div></div>
+          <div class="c-slide" style="background-image:url('gallery/cabin-4.png')"><div class="c-label">Cabin Booking — screenshot 4</div></div>
+          <div class="c-slide" style="background-image:url('gallery/cabin-5.png')"><div class="c-label">Cabin Booking — screenshot 5</div></div>
+          <div class="c-slide" style="background-image:url('gallery/cabin-6.png')"><div class="c-label">Cabin Booking — screenshot 6</div></div>
+        </div>
+        <div class="c-arrow c-prev">‹</div>
+        <div class="c-arrow c-next">›</div>
+        <div class="c-dots"><span class="c-dot active"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span><span class="c-dot"></span></div>
+      </div>
+      <div class="project-body">
+        <div class="tag-row">
+          <span class="project-tag">WEB · 2025</span>
+          <a class="repo-link" href="https://github.com/sedrajlilaty/The-Wild-Osais" target="_blank">GitHub ↗</a>
+        </div>
+        <h3>Cabin Booking System 🎀</h3>
+        <ul>
+          <li>Bookings list filterable by status — all, checked out, checked in, unconfirmed — with guest details, dates, and payment amount at a glance.</li>
+          <li>Cabin management with photo upload, capacity, pricing, and discounts, each with a website-facing description.</li>
+          <li>Guided check-in flow confirming guest ID, breakfast add-ons, and payment before finalizing a stay.</li>
+          <li>Hotel-wide settings (booking limits, breakfast pricing) plus account settings with password updates — every page fully toggleable between light and dark mode.</li>
+        </ul>
+        <div class="chip-row">
+          <span class="chip">React</span><span class="chip">Supabase</span><span class="chip">Tailwind CSS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEATURED: E-COMMERCE -->
+    <div class="project-feature">
+      <div class="project-media carousel" data-carousel>
+        <div class="c-track">
+          <div class="c-slide active" style="background-image:url('gallery/store-1.png')"><div class="c-label">SedraStore — screenshot 1</div></div>
+          <div class="c-slide" style="background-image:url('gallery/store-2.png')"><div class="c-label">SedraStore — screenshot 2</div></div>
+          <div class="c-slide" style="background-image:url('gallery/store-3.png')"><div class="c-label">SedraStore — screenshot 3</div></div>
+        </div>
+        <div class="c-arrow c-prev">‹</div>
+        <div class="c-arrow c-next">›</div>
+        <div class="c-dots"><span class="c-dot active"></span><span class="c-dot"></span><span class="c-dot"></span></div>
+      </div>
+      <div class="project-body">
+        <div class="tag-row">
+          <span class="project-tag">WEB · 2026</span>
+          <a class="repo-link" href="https://github.com/sedrajlilaty/E_Commerce" target="_blank">GitHub ↗</a>
+        </div>
+        <h3>SedraStore — E-commerce Web App 🎀</h3>
+        <ul>
+          <li>Full storefront with category browsing, a dedicated product page per item, ratings, and dynamic pricing with discounts.</li>
+          <li>Cart built around a "current order," with live quantity controls and a running summary through checkout.</li>
+          <li>Order history split into all/completed/cancelled, a favorites list, and a notification center — all gated behind authentication.</li>
+          <li>Fully toggleable light/dark mode across every page.</li>
+        </ul>
+        <div class="chip-row">
+          <span class="chip">React</span><span class="chip">REST API</span><span class="chip">Auth</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SMALLER PROJECTS GRID -->
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="thumb lb-trigger" style="background-image:url('gallery/movie-1.png')"><div class="t-label">Movie Discovery App</div></div>
+        <div class="pc-body">
+          <h4>Movie Discovery App 🎀</h4>
+          <p>Connected to a movie API — search a large catalog, rate titles with a custom star widget, and track a running watched list with average rating, runtime, and count stats.</p>
+          <div class="chip-row"><span class="chip">React</span><span class="chip">REST API</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="thumb lb-trigger" style="background-image:url('gallery/travel-1.png')"><div class="t-label">Travel Planner</div></div>
+        <div class="pc-body">
+          <h4>Travel Planner 🎀</h4>
+          <p>Interactive Leaflet map for logging every city you've visited, with dated, note-taking entries, geolocation, and full account authentication.</p>
+          <div class="chip-row"><span class="chip">React</span><span class="chip">Leaflet</span><span class="chip">Auth</span></div>
+          <a class="pc-link" href="https://github.com/sedrajlilaty/World_wise" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="thumb lb-trigger" style="background-image:url('gallery/bookstore-1.png')"><div class="t-label">Bookstore Admin &amp; Shop</div></div>
+        <div class="pc-body">
+          <h4>Bookstore Admin &amp; Shop 🎀</h4>
+          <p>Node.js app for browsing, adding, editing, and removing books, with separate admin and buyer logins, cart and checkout, real payment integration, and password change/recovery.</p>
+          <div class="chip-row"><span class="chip">Node.js</span><span class="chip">Auth</span><span class="chip">Payments</span></div>
+          <a class="pc-link" href="https://github.com/sedrajlilaty/Node-js-Tr" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="thumb lb-trigger" style="background-image:url('gallery/pizza-1.png')"><div class="t-label">Pizza Ordering Site</div></div>
+        <div class="pc-body">
+          <h4>Pizza Ordering Site 🎀</h4>
+          <p>Full ordering flow — browse a live menu with sold-out states, build a cart, check out with geolocation-based delivery, and track the order live with a countdown timer and priority pricing.</p>
+          <div class="chip-row"><span class="chip">React</span><span class="chip">Geolocation</span></div>
+          <a class="pc-link" href="https://github.com/sedrajlilaty/Fast-react-pizza" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- GALLERY -->
+<section id="gallery" class="pad">
+  <div class="wrap">
+    <div class="eyebrow-wrap"><span class="sec-num">03</span></div>
+    <h2 class="sec-title">Gallery</h2>
+    <p class="sec-sub">A few personal shots — click any tile to view it full size.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item lb-trigger" style="background-image:url('gallery/personal-1.png')">
+        <div class="gcap">Sedra Jlilaty<span>Personal photo</span></div>
+      </div>
+      <div class="gallery-item lb-trigger" style="background-image:url('gallery/personal-2.png')">
+        <div class="gcap">At work<span>Personal photo</span></div>
+      </div>
+      <div class="gallery-item lb-trigger" style="background-image:url('gallery/personal-3.png')">
+        <div class="gcap">Graduation / team<span>Personal photo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="divider"></div></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lightboxClose">✕</div>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- SKILLS -->
+<section id="skills" class="pad" style="padding-top:90px; padding-bottom:90px;">
+  <div class="wrap">
+    <div class="eyebrow-wrap"><span class="sec-num">04</span></div>
+    <h2 class="sec-title">Stack at a glance</h2>
+    <p class="sec-sub">The tools I reach for most, grouped by where they sit in the stack.</p>
+    <div class="about-grid" style="grid-template-columns:repeat(4,1fr); gap:20px;">
+      <div class="stat" style="padding:22px;">
+        <h4 style="font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:12.5px; margin:0 0 10px;">frontend</h4>
+        <p style="color:var(--text-muted); font-size:13.5px; line-height:1.7; margin:0;">React, TypeScript, Tailwind CSS</p>
+      </div>
+      <div class="stat" style="padding:22px;">
+        <h4 style="font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:12.5px; margin:0 0 10px;">mobile</h4>
+        <p style="color:var(--text-muted); font-size:13.5px; line-height:1.7; margin:0;">Flutter, Dart, Provider/BLoC</p>
+      </div>
+      <div class="stat" style="padding:22px;">
+        <h4 style="font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:12.5px; margin:0 0 10px;">backend</h4>
+        <p style="color:var(--text-muted); font-size:13.5px; line-height:1.7; margin:0;">Node.js, GraphQL, MongoDB</p>
+      </div>
+      <div class="stat" style="padding:22px;">
+        <h4 style="font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:12.5px; margin:0 0 10px;">tooling</h4>
+        <p style="color:var(--text-muted); font-size:13.5px; line-height:1.7; margin:0;">Git, Vercel, Cursor AI, Claude</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="pad" style="padding-top:40px;">
+  <div class="wrap">
+    <div class="contact-card">
+      <h2>Let's build something together.</h2>
+      <p>Available immediately for full-stack and frontend roles, freelance or remote. Reach out and I'll get back to you quickly.</p>
+      <div class="contact-links">
+        <a href="mailto:jlilatysedra@gmail.com" class="btn btn-primary">jlilatysedra@gmail.com</a>
+        <a href="https://github.com/sedrajlilaty" target="_blank" class="btn btn-ghost">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Damascus, Syria — available remotely · © <span id="yr"></span> Sedra Jlilaty</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const navLinks = document.querySelectorAll('.navbar a');
+const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href')));
+function setActive(){
+  let idx = 0;
+  const y = window.scrollY + 140;
+  sections.forEach((s,i) => { if(s && s.offsetTop <= y) idx = i; });
+  navLinks.forEach((a,i) => a.classList.toggle('active', i===idx));
+}
+window.addEventListener('scroll', setActive, {passive:true});
+setActive();
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const termBody = document.getElementById('termBody');
+
+const lines = [
+  {t:'<span class="c-key">const</span> developer <span class="c-punc">=</span> {'},
+  {t:'&nbsp;&nbsp;<span class="c-key">name</span>: <span class="c-str">\'Sedra\'</span>,'},
+  {t:'&nbsp;&nbsp;<span class="c-key">role</span>: <span class="c-str">\'Frontend &amp; Mobile Developer\'</span>,'},
+  {t:'&nbsp;&nbsp;<span class="c-key">stack</span>: [<span class="c-str">\'React\'</span>, <span class="c-str">\'Flutter\'</span>, <span class="c-str">\'Node.js\'</span>],'},
+  {t:'&nbsp;&nbsp;<span class="c-key">learning</span>: [<span class="c-str">\'GraphQL\'</span>, <span class="c-str">\'TypeScript\'</span>],'},
+  {t:'&nbsp;&nbsp;<span class="c-key">focus</span>: <span class="c-str">\'Bilingual, RTL-ready UI\'</span>,'},
+  {t:'&nbsp;&nbsp;<span class="c-key">location</span>: <span class="c-str">\'Damascus, Syria\'</span>'},
+  {t:'};'},
+  {t:'&nbsp;'},
+  {t:'<span class="c-fn">await</span> developer.<span class="c-fn">buildPortfolio</span>();'},
+  {t:'<span class="c-cm">// Featured: Ataa, King Booking, Cabin Booking</span>'},
+  {t:'&nbsp;'},
+  {t:'developer.<span class="c-fn">connect</span>();'},
+  {t:'<span class="c-fn">console</span>.<span class="c-fn">log</span>(<span class="c-str">\'Let\\\'s build something great ✨\'</span>);'},
+];
+
+function renderStatic(){
+  termBody.innerHTML = lines.map(l => `<div>${l.t}</div>`).join('');
+}
+
+async function typeLines(){
+  const cursor = document.createElement('span');
+  cursor.id = 'typecursor';
+  for(const line of lines){
+    const row = document.createElement('div');
+    termBody.appendChild(row);
+    row.appendChild(cursor);
+    await typeHtml(row, cursor, line.t);
+    await sleep(65);
+  }
+  cursor.remove();
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function typeHtml(row, cursor, html){
+  const tokens = html.match(/<[^>]+>|&\w+;|[^<&]/g) || [];
+  let acc = '';
+  for(const tok of tokens){
+    acc += tok;
+    row.innerHTML = acc;
+    row.appendChild(cursor);
+    if(tok.startsWith('<') || tok.startsWith('&')){ continue; }
+    await sleep(7);
+  }
+}
+
+if(reduceMotion){
+  renderStatic();
+} else {
+  typeLines();
+}
+
+// GALLERY LIGHTBOX
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxClose = document.getElementById('lightboxClose');
+
+document.querySelectorAll('.lb-trigger').forEach(item => {
+  item.addEventListener('click', () => {
+    const bg = item.style.backgroundImage.slice(5, -2); // strip url("...")
+    const label = item.querySelector('.gcap, .t-label');
+    lightboxImg.src = bg;
+    lightboxImg.alt = label ? label.textContent : '';
+    lightbox.classList.add('open');
+  });
+});
+
+function closeLightbox(){ lightbox.classList.remove('open'); lightboxImg.src=''; }
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+
+// PROJECT SCREENSHOT CAROUSELS
+document.querySelectorAll('[data-carousel]').forEach(car => {
+  const slides = [...car.querySelectorAll('.c-slide')];
+  const dots = [...car.querySelectorAll('.c-dot')];
+  let i = 0;
+  function show(n){
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+  }
+  car.querySelector('.c-prev').addEventListener('click', () => show(i - 1));
+  car.querySelector('.c-next').addEventListener('click', () => show(i + 1));
+  dots.forEach((d, idx) => d.addEventListener('click', () => show(idx)));
+});
+</script>
+
+</body>
+</html>
